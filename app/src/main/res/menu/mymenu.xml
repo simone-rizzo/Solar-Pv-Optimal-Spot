@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/works"
+        android:icon="@drawable/ic_function"
+        android:title="Why does it work?"/>
+    <item android:id="@+id/credits"
+        android:icon="@drawable/ic_credits"
+        android:title="Credits"/>
+    <item android:id="@+id/help"
+        android:icon="@drawable/ic_info"
+        android:title="Help" />
+</menu>
