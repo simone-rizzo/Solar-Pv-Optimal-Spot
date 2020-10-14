@@ -181,46 +181,23 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"></TextView>
 
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_gradient_style"
-        android:orientation="vertical"
-        android:weightSum="1"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-            <TextView
-                android:id="@+id/irradianza"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="visible" />
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:textColor="#fff"
-                android:textSize="20dp"></TextView>
-
-        </LinearLayout>
-
-
-        <com.anychart.AnyChartView
-            android:id="@+id/any_chart_view"
+        <com.rizzo.sensortest.opengl.OpenGlView
+            android:id="@+id/openGLView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible">
+            android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:indeterminate="true"
-                android:indeterminateTintMode="src_atop"
-                android:indeterminateTint="@color/colorPrimary"></ProgressBar>
+        </com.rizzo.sensortest.opengl.OpenGlView>
 
-        </com.anychart.AnyChartView>
 
     </LinearLayout>
 

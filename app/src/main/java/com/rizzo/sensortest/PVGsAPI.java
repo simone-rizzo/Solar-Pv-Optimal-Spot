@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rizzo.sensortest.opengl.OpenGLRenderer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -55,11 +56,12 @@ public class PVGsAPI implements Runnable {
                 public void run() {
                     Lat.setText(value[0]+"°");
                     Lng.setText(value[1]+"° S");
-                    Altezza.setText("Elevation: "+altezza);
+                    //Altezza.setText("Elevation: "+altezza);
                     Lat.setAnimation(MainActivity.btnAnim);
                     Lng.setAnimation(MainActivity.btnAnim);
-                    Altezza.setAnimation(MainActivity.btnAnim);
+                    //Altezza.setAnimation(MainActivity.btnAnim);
                     progressBar.setVisibility(View.GONE);
+                    OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
                 }
             });
 

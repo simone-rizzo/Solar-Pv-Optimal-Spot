@@ -43,6 +43,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.rizzo.sensortest.opengl.OpenGLRenderer;
+import com.rizzo.sensortest.opengl.OpenGlView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,15 +83,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Coordinate lista_taubd;
 
-    private AnyChartView anyChartView;
+    //private AnyChartView anyChartView;
 
     public static Animation btnAnim;
     private static DrawerLayout drawerLayout;
+    private static OpenGlView openGlView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        openGlView = (OpenGlView) findViewById(R.id.openGLView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         compass_img = (ImageView) findViewById(R.id.imageView);
@@ -99,9 +104,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         latlogText = (TextView) findViewById(R.id.latlog);
         inclinazioneOttima = (TextView) findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) findViewById(R.id.gradiOptimaltext);
-        irradianza = (TextView) findViewById(R.id.irradianza);
-        anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
-        anyChartView.setProgressBar(progressBar);
+        //irradianza = (TextView) findViewById(R.id.irradianza);
+        //anyChartView.setProgressBar(progressBar);
         btnAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_animation);
 
 
@@ -167,9 +171,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             g2[0] = g2[0] / (float) norm_Of_g;
             g2[1] = g2[1] / (float) norm_Of_g;
             g2[2] = g2[2] / (float) norm_Of_g;
-            int inclination = (int) Math.round(Math.toDegrees(Math.acos(g2[2])));
+            int inclination_raw = (int) Math.toDegrees(Math.acos(g2[2]));
+            OpenGLRenderer.Instance.setX(inclination_raw);
+            int inclination = Math.round(inclination_raw);
             gradi = inclination;
             txt_inclinazione.setText(gradi + "°");
+
         }
 
         @Override
@@ -198,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             SensorManager.getOrientation(rMat, orientation);
             mAzimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]) + 360) % 360;
         }
-
+        OpenGLRenderer.Instance.setZ(mAzimuth);
         mAzimuth = Math.round(mAzimuth);
         compass_img.setRotation(-mAzimuth);
 
@@ -276,12 +283,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
+        openGlView.onPause();
         stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        openGlView.onResume();
         mSensorManager.registerListener(accelelistner, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         start();
     }

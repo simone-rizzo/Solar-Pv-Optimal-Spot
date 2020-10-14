@@ -28,7 +28,7 @@ public class chart extends AppCompatActivity {
 
         pie.data(data);
 
-        AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
-        anyChartView.setChart(pie);
+        //AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
+        //anyChartView.setChart(pie);
     }
 }
