@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -60,7 +61,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
 
     ImageView compass_img;
     private TextView txt_compass;
@@ -89,11 +90,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static DrawerLayout drawerLayout;
     private static OpenGlView openGlView;
 
+    private Button worksButton,creditsButton,helpButton;
+    private NavigationView navigationView;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onClick(View v) {
+        if (worksButton.equals(v)) {
+            Intent intent = new Intent(this, why_it_works.class);
+            startActivity(intent);
+        } else if (creditsButton.equals(v)) {
+        } else if (helpButton.equals(v)) {
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        navigationView = (NavigationView) findViewById(R.id.navigation_menu);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.works:
+                        Intent intent = new Intent(getApplicationContext(), why_it_works.class);
+                        startActivity(intent);
+                        break;
+                }
+                return false;
+            }
+        });
+        /*worksButton = ((Button)findViewById(R.id.works));
+        worksButton.setOnClickListener(this::onClick);
+        creditsButton = ((Button)findViewById(R.id.credits));
+        creditsButton.setOnClickListener(this::onClick);
+        helpButton = ((Button)findViewById(R.id.help));
+        helpButton.setOnClickListener(this::onClick);*/
         openGlView = (OpenGlView) findViewById(R.id.openGLView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
