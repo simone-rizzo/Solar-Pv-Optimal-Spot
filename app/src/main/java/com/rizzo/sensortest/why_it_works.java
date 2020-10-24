@@ -23,7 +23,7 @@ public class why_it_works extends AppCompatActivity {
         //Handling Page Navigation
         webview.setWebViewClient(new WebViewClient());
         //Load a URL on WebView
-        webview.loadUrl("http://stackoverflow.com/");
+        webview.loadUrl("https://drive.google.com/file/d/1em5KtU7d_BbG7Glvr_IYrpokBgjjZE00/view?usp=sharing");
     }
     /*private class MyWebViewClient extends WebViewClient {
         @Override

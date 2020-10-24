@@ -61,7 +61,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     ImageView compass_img;
     private TextView txt_compass;
@@ -93,15 +93,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button worksButton,creditsButton,helpButton;
     private NavigationView navigationView;
 
-    @Override
-    public void onClick(View v) {
-        if (worksButton.equals(v)) {
-            Intent intent = new Intent(this, why_it_works.class);
-            startActivity(intent);
-        } else if (creditsButton.equals(v)) {
-        } else if (helpButton.equals(v)) {
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -117,16 +108,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         Intent intent = new Intent(getApplicationContext(), why_it_works.class);
                         startActivity(intent);
                         break;
+                    case R.id.credits:
+                        Intent intent2 = new Intent(getApplicationContext(), credits.class);
+                        startActivity(intent2);
+                        break;
+                    case R.id.help:
+                        Intent intent3 = new Intent(getApplicationContext(), IntroActivity.class);
+                        intent3.putExtra("main",true);
+                        startActivity(intent3);
+                        break;
                 }
                 return false;
             }
         });
-        /*worksButton = ((Button)findViewById(R.id.works));
-        worksButton.setOnClickListener(this::onClick);
-        creditsButton = ((Button)findViewById(R.id.credits));
-        creditsButton.setOnClickListener(this::onClick);
-        helpButton = ((Button)findViewById(R.id.help));
-        helpButton.setOnClickListener(this::onClick);*/
         openGlView = (OpenGlView) findViewById(R.id.openGLView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);

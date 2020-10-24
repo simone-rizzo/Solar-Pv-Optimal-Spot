@@ -43,8 +43,12 @@ public class IntroActivity extends AppCompatActivity {
 
 
         // when this activity is about to be launch we need to check if its openened before or not
-
-        if (restorePrefData()) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Boolean value = extras.getBoolean("main");
+            //The key argument here must match that used in the other activity
+        }
+        else if (restorePrefData()) {
             Intent mainActivity = new Intent(getApplicationContext(),MainActivity.class );
             startActivity(mainActivity);
             finish();
