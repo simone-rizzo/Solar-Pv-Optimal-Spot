@@ -32,7 +32,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -54,6 +58,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -139,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Button button = (Button) findViewById(R.id.button);
         button.setAnimation(btnAnim);
 
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
                     String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, irradianza, progressBar);
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, irradianza, progressBar, anyChartView);
                     Thread a = new Thread(task);
                     a.start();
                     progressBar.setVisibility(View.VISIBLE);
@@ -238,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         String where = "NW";
 
-        if(mAzimuth>=180)
+        if(mAzimuth>180)
         {
             mAzimuth-=360;
         }
@@ -260,8 +267,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (mAzimuth <= 80 && mAzimuth > 10)
             where = "SW";
          */
-
-
         txt_compass.setText(mAzimuth + "° S");
     }
 
