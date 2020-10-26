@@ -61,7 +61,7 @@ public class PVGsAPI implements Runnable {
                     Lng.setAnimation(MainActivity.btnAnim);
                     //Altezza.setAnimation(MainActivity.btnAnim);
                     progressBar.setVisibility(View.GONE);
-                    OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
+                    //OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
                 }
             });
 

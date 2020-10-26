@@ -181,22 +181,23 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"></TextView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/colorPrimary"
-            android:indeterminateTintMode="src_atop"
-            android:visibility="visible" />
-
-        <com.rizzo.sensortest.opengl.OpenGlView
-            android:id="@+id/openGLView"
+        <com.anychart.AnyChartView
+            android:id="@+id/any_chart_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
-        </com.rizzo.sensortest.opengl.OpenGlView>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:indeterminate="true"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/colorPrimary"></ProgressBar>
+
+        </com.anychart.AnyChartView>
 
 
     </LinearLayout>
