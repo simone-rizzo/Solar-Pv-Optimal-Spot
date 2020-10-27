@@ -111,10 +111,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 {
                     case R.id.works:
                         Intent intent = new Intent(getApplicationContext(), why_it_works.class);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         break;
                     case R.id.credits:
                         Intent intent2 = new Intent(getApplicationContext(), credits.class);
+                        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent2);
                         break;
                     case R.id.help:
@@ -205,10 +207,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             g2[0] = g2[0] / (float) norm_Of_g;
             g2[1] = g2[1] / (float) norm_Of_g;
             g2[2] = g2[2] / (float) norm_Of_g;
-            /*int inclination_raw = (int) Math.toDegrees(Math.acos(g2[2]));
-            OpenGLRenderer.Instance.setX(inclination_raw);
+            int inclination_raw = (int) Math.toDegrees(Math.acos(g2[2]));
+            //OpenGLRenderer.Instance.setX(inclination_raw);
             int inclination = Math.round(inclination_raw);
-            gradi = inclination;*/
+            gradi = inclination;
             txt_inclinazione.setText(gradi + "°");
 
         }

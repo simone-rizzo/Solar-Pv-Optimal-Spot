@@ -19,18 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".credits"
-            android:label="Credits"
-            android:parentActivityName=".MainActivity"
-            ></activity>
+        <activity
+            android:name=".TabbedActivity"
+            android:label="@string/title_activity_tabbed"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".credits"
+            android:label="Credits" />
         <activity
             android:name=".why_it_works"
-            android:label="Documentation"
-            android:parentActivityName=".MainActivity"></activity>
+            android:label="Documentation" />
         <activity android:name=".chart" />
         <activity android:name=".IntroActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:launchMode="singleTask" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
