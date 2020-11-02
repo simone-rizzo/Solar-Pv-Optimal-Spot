@@ -84,24 +84,7 @@ public class PVGsAPI implements Runnable {
                         media = (double) (media + (double) irradianza);
                     }
                 }
-
             }
-            Cartesian pie = AnyChart.line();
-            pie.animation(true);
-            pie.title("Irradianza per giorno");
-            pie.yAxis(0).title("Irradianza");
-            pie.xAxis(0).title("giorni");
-
-            List<DataEntry> data = new ArrayList<>();
-            for(int i=0;i<dati.size();i++)
-            {
-                data.add(new ValueDataEntry((i+1),dati.get(i)));
-
-            }
-
-            pie.data(data);
-
-            //int altezza = node.get("inputs").get("location").get("elevation").asInt();
             Lat.post(new Runnable() {
                 @Override
                 public void run() {
@@ -116,14 +99,14 @@ public class PVGsAPI implements Runnable {
                     //OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
                 }
             });
-            anyChartView.post(new Runnable() {
-                @Override
-                public void run() {
-                    anyChartView.setChart(pie);
-                }
-            });
 
-        } finally {
+
+        }
+        catch (Exception e)
+        {
+
+        }
+        finally {
             urlConnection.disconnect();
         }
     }

@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:text="Dott. Andrea Lanzini" />
+            android:text="Dott. Andrea Lanzini (Associate Professor at Politecnico di Torino)" />
 
         <Space
             android:layout_width="match_parent"

@@ -21,8 +21,14 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".TabbedActivity"
-            android:label="@string/title_activity_tabbed"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_tabbed">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:launchMode="singleTask" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".credits"
             android:label="Credits" />
@@ -31,13 +37,6 @@
             android:label="Documentation" />
         <activity android:name=".chart" />
         <activity android:name=".IntroActivity">
-            <intent-filter>
-                <action
-                    android:name="android.intent.action.MAIN"
-                    android:launchMode="singleTask" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
     </application>
