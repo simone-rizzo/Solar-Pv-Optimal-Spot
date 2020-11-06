@@ -12,7 +12,9 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -155,9 +157,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
                     String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, irradianza, progressBar, anyChartView);
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView, handler);
                     Thread a = new Thread(task);
-                    a.start();
+                    //a.start();
+
                     progressBar.setVisibility(View.VISIBLE);
                         /*inclinazioneOttima.setText(valori[0]);
                         orientamentoOttimo.setText(valori[1]);*/
@@ -180,6 +183,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getMenuInflater().inflate(R.menu.appbar_actions, menu);
         return true;
     }
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            /*if(msg.what==SendReceive.DISCONNECT)
+            {
+                Toast.makeText(getApplicationContext(),"Disconnected",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }*/
+        }
+    } ;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

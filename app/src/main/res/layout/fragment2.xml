@@ -28,6 +28,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <LinearLayout android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Select PV:"
+                        android:textSize="15dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp">
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,7 +215,7 @@
                 android:layout_marginBottom="10dp"></TextView>
 
             <com.anychart.AnyChartView
-                android:id="@+id/any_chart_view1"
+                android:id="@+id/any_chart_view2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible">

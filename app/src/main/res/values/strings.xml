@@ -3,4 +3,10 @@
     <string name="title_activity_tabbed">Solar and PV Optimal Spot</string>
     <string name="tab_text_1">Solar</string>
     <string name="tab_text_2">Photovoltaic</string>
+    <string-array name="pv_type">
+        <item>crystSi</item>
+        <item>CIS</item>
+        <item>CdTe</item>
+        <item>Unknown</item>
+    </string-array>
 </resources>

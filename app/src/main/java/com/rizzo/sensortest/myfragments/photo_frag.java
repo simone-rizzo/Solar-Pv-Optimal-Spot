@@ -13,17 +13,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -44,38 +44,25 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.rizzo.sensortest.Coordinate;
-import com.rizzo.sensortest.IntroActivity;
-import com.rizzo.sensortest.MainActivity;
 import com.rizzo.sensortest.PVGsAPI;
 import com.rizzo.sensortest.R;
-import com.rizzo.sensortest.credits;
 import com.rizzo.sensortest.opengl.OpenGlView;
-import com.rizzo.sensortest.why_it_works;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class solar_frag extends Fragment implements SensorEventListener {
+public class photo_frag extends Fragment implements SensorEventListener, AdapterView.OnItemSelectedListener {
 
     ImageView compass_img;
     private TextView txt_compass;
-    private TextView txt_inclinazione, inclinazioneOttima, orientamentoOttimo;
+    private TextView txt_inclinazione, inclinazioneOttima, orientamentoOttimo, irradianza;
     int mAzimuth;
     private SensorManager mSensorManager;
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
@@ -92,20 +79,22 @@ public class solar_frag extends Fragment implements SensorEventListener {
     private TextView latlogText;
     private Double Lat, Lng;
 
-    private Coordinate lista_taubd;
-
     private AnyChartView anyChartView;
 
     public static Animation btnAnim;
 
-    private static OpenGlView openGlView;
-    private solar_viewModel myModel;
+    private String pv_choise = "crystSi";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment1, container, false);
-        myModel =  new ViewModelProvider(requireActivity()).get(solar_viewModel.class);
+        View view = inflater.inflate(R.layout.fragment2, container, false);
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(),
+                R.array.pv_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         compass_img = (ImageView) view.findViewById(R.id.imageView);
         txt_compass = (TextView) view.findViewById(R.id.graditext);
@@ -114,13 +103,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
         latlogText = (TextView) view.findViewById(R.id.latlog);
         inclinazioneOttima = (TextView) view.findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
-        anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view1);
-        myModel.getData().observe(getViewLifecycleOwner(), dataEntries -> {
-            Cartesian cartesian = AnyChart.line();
-            cartesian.data(dataEntries);
-            anyChartView.setChart(cartesian);
-        });
-
+        anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view2);
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
         Button button = (Button) view.findViewById(R.id.button);
         button.setAnimation(btnAnim);
@@ -128,16 +111,14 @@ public class solar_frag extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 if (Lat != null && Lng != null) {
-                    setChart();
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
+                    setChart();
                     /*String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView, handler);
-                    myModel.fetch_data(task);*/
-                    /*Thread a = new Thread(task);
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice="+pv_choise+"&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, true, progressBar, anyChartView, handler);
+                    Thread a = new Thread(task);
                     a.start();
                     progressBar.setVisibility(View.VISIBLE);*/
-
                         /*inclinazioneOttima.setText(valori[0]);
                         orientamentoOttimo.setText(valori[1]);*/
 
@@ -153,6 +134,11 @@ public class solar_frag extends Fragment implements SensorEventListener {
         start();
         return view;
     }
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+        }
+    };
     public void setChart()
     {
         Cartesian pie = AnyChart.line();
@@ -163,7 +149,19 @@ public class solar_frag extends Fragment implements SensorEventListener {
         pie.data(data);
         anyChartView.setChart(pie);
     }
-    Handler handler = new Handler(Looper.getMainLooper());
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+        String s = (String) parent.getItemAtPosition(pos);
+        pv_choise=s;
+        Log.d("cazzo",s);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
 
     private SensorEventListener accelelistner = new SensorEventListener() {
         @Override
@@ -181,7 +179,6 @@ public class solar_frag extends Fragment implements SensorEventListener {
             int inclination = Math.round(inclination_raw);
             gradi = inclination;
             txt_inclinazione.setText(gradi + "°");
-
         }
 
         @Override
@@ -219,24 +216,6 @@ public class solar_frag extends Fragment implements SensorEventListener {
         {
             mAzimuth-=360;
         }
-
-        /*if (mAzimuth >= 350 || mAzimuth <= 10)
-            where = "S";
-        if (mAzimuth < 350 && mAzimuth > 280)
-            where = "SE";
-        if (mAzimuth <= 280 && mAzimuth > 260)
-            where = "E";
-        if (mAzimuth <= 260 && mAzimuth > 190)
-            where = "NE";
-        if (mAzimuth <= 190 && mAzimuth > 170)
-            where = "N";
-        if (mAzimuth <= 170 && mAzimuth > 100)
-            where = "NW";
-        if (mAzimuth <= 100 && mAzimuth > 80)
-            where = "W";
-        if (mAzimuth <= 80 && mAzimuth > 10)
-            where = "SW";
-         */
         txt_compass.setText(mAzimuth + "° S");
     }
 
