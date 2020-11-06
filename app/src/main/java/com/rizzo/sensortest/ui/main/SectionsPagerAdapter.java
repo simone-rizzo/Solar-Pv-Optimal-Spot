@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         if(position==1)
-            return new solar_frag();
+            return new photo_frag();
         else
             return new solar_frag();
     }

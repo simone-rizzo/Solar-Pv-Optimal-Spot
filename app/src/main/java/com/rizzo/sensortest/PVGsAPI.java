@@ -25,6 +25,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import com.anychart.AnyChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
 import android.os.Handler;
 
 import androidx.lifecycle.MutableLiveData;
@@ -45,19 +51,18 @@ public class PVGsAPI implements Runnable {
     private String urlToread;
     private  TextView Lat,Lng;
     private  ProgressBar progressBar;
-    private  AnyChartView anyChartView;
-    private  Handler handler;
+    private  LineChart anyChartView;
+    //private  Handler handler;
     private  boolean pv;
     private MutableLiveData<List<DataEntry>> mutable;
 
-    public PVGsAPI(String urlToread, TextView lat, TextView lng, boolean pv, ProgressBar progressBar,AnyChartView anyChartView, Handler handler ) {
+    public PVGsAPI(String urlToread, TextView lat, TextView lng, boolean pv, ProgressBar progressBar, LineChart anyChartView) {
         this.urlToread = urlToread;
         this.Lat=lat;
         this.Lng=lng;
         this.pv=pv;
         this.progressBar=progressBar;
         this.anyChartView=anyChartView;
-        this.handler=handler;
     }
 
     public void getHTML(String urlToRead) throws Exception {
@@ -72,7 +77,7 @@ public class PVGsAPI implements Runnable {
             value[0] = node.get("inputs").get("mounting_system").get("fixed").get("slope").get("value").asInt();
             value[1] = node.get("inputs").get("mounting_system").get("fixed").get("azimuth").get("value").asInt();
             ArrayNode listaIrradianza = (ArrayNode) node.get("outputs").get("hourly");
-            //List<DataEntry> data = new ArrayList<>();
+
             ArrayList<Double> dati = new ArrayList<Double>();
             int numero_days = 1;
             double media = 0.0f;
@@ -87,22 +92,18 @@ public class PVGsAPI implements Runnable {
                     ObjectNode n = (ObjectNode) listaIrradianza.get(i);
                     double irradianza = n.get((!pv) ? "G(i)" : "P").asDouble();
                     if (irradianza > 0) {
-                        media = (double) (media + (double) irradianza);
+                        media = (float) (media + (double) irradianza);
                     }
                 }
-
             }
-            Cartesian pie = AnyChart.line();
-            // pie.animation(true);
-            pie.title((!pv) ? "Irradianza per giorno" : "Potenza per giorno");
-            pie.yAxis(0).title((!pv) ? "Irradianza W/m2" : "Potenza w");
-            pie.xAxis(0).title("giorni");
-
-            List<DataEntry> data = new ArrayList<>();
+            List<Entry> data = new ArrayList<Entry>();
             for (int i = 0; i < dati.size(); i++) {
-                data.add(new ValueDataEntry((i + 1), dati.get(i)));
+                double d = dati.get(i);
+                data.add(new Entry((i + 1), (float)(d)));
             }
-            pie.data(data);
+            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Irradianza":"Potenza");
+            dataSet.setColor(R.color.gradient_end_color);
+            LineData lineData = new LineData(dataSet);
 
             //int altezza = node.get("inputs").get("location").get("elevation").asInt();
             Lat.post(new Runnable() {
@@ -112,24 +113,16 @@ public class PVGsAPI implements Runnable {
                     Lng.setText(value[1] + "° S");
                     Lat.setAnimation(MainActivity.btnAnim);
                     Lng.setAnimation(MainActivity.btnAnim);
-
-                    //anyChartView.setChart(pie);
                     progressBar.setVisibility(View.GONE);
                     //OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
                 }
             });
-            if(pv) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        anyChartView.setChart(pie);
-                    }
-                });
-            }
-            else
-            {
-                mutable.postValue(data);
-            }
+            anyChartView.setData(lineData);
+            Description d = new Description();
+            d.setText((!pv)?"Irradianza per giorno":"Potenza per giorno");
+            anyChartView.setDescription(new Description());
+            anyChartView.animate();
+            anyChartView.invalidate();
         }
         catch (Exception e)
         {

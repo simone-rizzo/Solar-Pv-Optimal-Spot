@@ -3,8 +3,9 @@ package com.rizzo.sensortest.myfragments;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,11 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -27,16 +24,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -44,32 +39,21 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.rizzo.sensortest.Coordinate;
-import com.rizzo.sensortest.IntroActivity;
-import com.rizzo.sensortest.MainActivity;
 import com.rizzo.sensortest.PVGsAPI;
 import com.rizzo.sensortest.R;
-import com.rizzo.sensortest.credits;
 import com.rizzo.sensortest.opengl.OpenGlView;
-import com.rizzo.sensortest.why_it_works;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.util.*;
 
 public class solar_frag extends Fragment implements SensorEventListener {
 
@@ -94,7 +78,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
 
     private Coordinate lista_taubd;
 
-    private AnyChartView anyChartView;
+    private LineChart plot;
 
     public static Animation btnAnim;
 
@@ -114,12 +98,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
         latlogText = (TextView) view.findViewById(R.id.latlog);
         inclinazioneOttima = (TextView) view.findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
-        anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view1);
-        myModel.getData().observe(getViewLifecycleOwner(), dataEntries -> {
-            Cartesian cartesian = AnyChart.line();
-            cartesian.data(dataEntries);
-            anyChartView.setChart(cartesian);
-        });
+        plot = (LineChart) view.findViewById(R.id.plot);
 
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
         Button button = (Button) view.findViewById(R.id.button);
@@ -128,19 +107,9 @@ public class solar_frag extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 if (Lat != null && Lng != null) {
-                    setChart();
-                    /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
-                    a.start();*/
-                    /*String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView, handler);
-                    myModel.fetch_data(task);*/
-                    /*Thread a = new Thread(task);
-                    a.start();
-                    progressBar.setVisibility(View.VISIBLE);*/
-
-                        /*inclinazioneOttima.setText(valori[0]);
-                        orientamentoOttimo.setText(valori[1]);*/
-
+                    String id = "";
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, plot);
+                    myModel.fetch_data(task);
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Latitudine e Longitudine non ancora pronti",
                             Toast.LENGTH_SHORT).show();
@@ -155,13 +124,16 @@ public class solar_frag extends Fragment implements SensorEventListener {
     }
     public void setChart()
     {
-        Cartesian pie = AnyChart.line();
-        List<DataEntry> data = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            data.add(new ValueDataEntry((i + 1), i));
+        List<Entry> entries = new ArrayList<Entry>();
+        for(int i=0;i<50;i++)
+        {
+            entries.add(new Entry(i,i*2));
         }
-        pie.data(data);
-        anyChartView.setChart(pie);
+        LineDataSet dataSet = new LineDataSet(entries,"Prova");
+        dataSet.setColor(R.color.gradient_end_color);
+        LineData lineData = new LineData(dataSet);
+        plot.setData(lineData);
+        plot.invalidate();
     }
     Handler handler = new Handler(Looper.getMainLooper());
 
@@ -181,9 +153,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
             int inclination = Math.round(inclination_raw);
             gradi = inclination;
             txt_inclinazione.setText(gradi + "°");
-
         }
-
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
@@ -209,34 +179,12 @@ public class solar_frag extends Fragment implements SensorEventListener {
             SensorManager.getOrientation(rMat, orientation);
             mAzimuth = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]) + 360) % 360;
         }
-        /*OpenGLRenderer.Instance.setZ(mAzimuth);
-        mAzimuth = Math.round(mAzimuth);
-        compass_img.setRotation(-mAzimuth);*/
-
         String where = "NW";
 
         if(mAzimuth>180)
         {
             mAzimuth-=360;
         }
-
-        /*if (mAzimuth >= 350 || mAzimuth <= 10)
-            where = "S";
-        if (mAzimuth < 350 && mAzimuth > 280)
-            where = "SE";
-        if (mAzimuth <= 280 && mAzimuth > 260)
-            where = "E";
-        if (mAzimuth <= 260 && mAzimuth > 190)
-            where = "NE";
-        if (mAzimuth <= 190 && mAzimuth > 170)
-            where = "N";
-        if (mAzimuth <= 170 && mAzimuth > 100)
-            where = "NW";
-        if (mAzimuth <= 100 && mAzimuth > 80)
-            where = "W";
-        if (mAzimuth <= 80 && mAzimuth > 10)
-            where = "SW";
-         */
         txt_compass.setText(mAzimuth + "° S");
     }
 

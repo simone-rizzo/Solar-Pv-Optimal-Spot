@@ -33,6 +33,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
+import com.github.mikephil.charting.charts.LineChart;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -79,7 +80,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
     private TextView latlogText;
     private Double Lat, Lng;
 
-    private AnyChartView anyChartView;
+    private LineChart anyChartView;
 
     public static Animation btnAnim;
 
@@ -103,7 +104,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         latlogText = (TextView) view.findViewById(R.id.latlog);
         inclinazioneOttima = (TextView) view.findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
-        anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view2);
+        anyChartView = (LineChart) view.findViewById(R.id.plot);
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
         Button button = (Button) view.findViewById(R.id.button);
         button.setAnimation(btnAnim);
@@ -113,12 +114,11 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
                 if (Lat != null && Lng != null) {
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
-                    setChart();
-                    /*String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice="+pv_choise+"&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, true, progressBar, anyChartView, handler);
+                    String id = "";
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice="+pv_choise+"&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, true, progressBar, anyChartView);
                     Thread a = new Thread(task);
                     a.start();
-                    progressBar.setVisibility(View.VISIBLE);*/
+                    progressBar.setVisibility(View.VISIBLE);
                         /*inclinazioneOttima.setText(valori[0]);
                         orientamentoOttimo.setText(valori[1]);*/
 
@@ -139,16 +139,6 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         public void handleMessage(@NonNull Message msg) {
         }
     };
-    public void setChart()
-    {
-        Cartesian pie = AnyChart.line();
-        List<DataEntry> data = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            data.add(new ValueDataEntry((i + 1), i));
-        }
-        pie.data(data);
-        anyChartView.setChart(pie);
-    }
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {

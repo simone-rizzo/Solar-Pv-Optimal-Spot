@@ -39,6 +39,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
+import com.github.mikephil.charting.charts.LineChart;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Coordinate lista_taubd;
 
-    private AnyChartView anyChartView;
+    private LineChart anyChartView;
 
     public static Animation btnAnim;
     private static DrawerLayout drawerLayout;
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         inclinazioneOttima = (TextView) findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) findViewById(R.id.gradiOptimaltext);
         //irradianza = (TextView) findViewById(R.id.irradianza);
-        anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
+        anyChartView = (LineChart) findViewById(R.id.any_chart_view);
         //anyChartView.setProgressBar(progressBar);
         btnAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_animation);
 
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
                     String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView, handler);
+                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView);
                     Thread a = new Thread(task);
                     //a.start();
 
