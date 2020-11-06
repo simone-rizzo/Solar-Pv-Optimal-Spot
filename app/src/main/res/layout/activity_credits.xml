@@ -110,6 +110,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:text="Antonio Caratozzolo" />
+            android:text="Antonino Caratozzolo" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Orientamento attuale"
+                    android:text="Detected orientation"
                     android:textSize="15dp"></TextView>
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Orientamento ottimale"
+                    android:text="Optimal orientation"
                     android:textSize="15dp"></TextView>
 
             </LinearLayout>
@@ -75,7 +75,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="ciao"
+                    android:text="0"
                     android:textColor="#fff"
                     android:textSize="30dp"></TextView>
 
@@ -108,7 +108,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Inclinazione attuale"
+                    android:text="Detected inclination"
                     android:textSize="15dp"></TextView>
 
                 <TextView
@@ -119,7 +119,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Inclinazione ottimale"
+                    android:text="Optimal inclination"
                     android:textSize="15dp"></TextView>
 
             </LinearLayout>
@@ -181,19 +181,21 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"></TextView>
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:indeterminate="true"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/colorPrimary"></ProgressBar>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/plot"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:visibility="visible"
-                    android:indeterminate="true"
-                    android:indeterminateTintMode="src_atop"
-                    android:indeterminateTint="@color/colorPrimary"></ProgressBar>
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
             </com.github.mikephil.charting.charts.LineChart>
 
         </LinearLayout>
@@ -206,7 +208,7 @@
             android:layout_weight="1"
             android:background="@drawable/btn_gradient_style"
             android:textColor="#fff"
-            android:text="Calcola"
+            android:text="Calculate"
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

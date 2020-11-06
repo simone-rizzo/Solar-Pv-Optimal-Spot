@@ -26,10 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import com.anychart.AnyChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import android.os.Handler;
 
@@ -85,7 +87,6 @@ public class PVGsAPI implements Runnable {
                 if ((i + 1) % 24 == 0) {
                     media = media / 24;
                     dati.add(media);
-                    //data.add(new ValueDataEntry((numero_days),media));
                     numero_days++;
                     media = 0;
                 } else {
@@ -101,7 +102,7 @@ public class PVGsAPI implements Runnable {
                 double d = dati.get(i);
                 data.add(new Entry((i + 1), (float)(d)));
             }
-            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Irradianza":"Potenza");
+            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Daily mean irradiance":"Daily mean power");
             dataSet.setColor(R.color.gradient_end_color);
             LineData lineData = new LineData(dataSet);
 
@@ -114,14 +115,16 @@ public class PVGsAPI implements Runnable {
                     Lat.setAnimation(MainActivity.btnAnim);
                     Lng.setAnimation(MainActivity.btnAnim);
                     progressBar.setVisibility(View.GONE);
+                    anyChartView.setVisibility(View.VISIBLE);
                     //OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
                 }
             });
             anyChartView.setData(lineData);
-            Description d = new Description();
-            d.setText((!pv)?"Irradianza per giorno":"Potenza per giorno");
-            anyChartView.setDescription(new Description());
-            anyChartView.animate();
+            anyChartView.getDescription().setEnabled(false);
+            MyXAxisFormatter formatterX = new MyXAxisFormatter();
+            MyYAxisFormatter formatterY = new MyYAxisFormatter();
+            anyChartView.getAxisLeft().setValueFormatter((!pv)?formatterY:new MyY2AxisFormatter());
+            anyChartView.getXAxis().setValueFormatter(formatterX);
             anyChartView.invalidate();
         }
         catch (Exception e)
@@ -135,6 +138,25 @@ public class PVGsAPI implements Runnable {
     public void set(MutableLiveData<List<DataEntry>> data)
     {
         this.mutable=data;
+    }
+
+    class MyYAxisFormatter extends ValueFormatter {
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            return value+"W/m2";
+        }
+    }
+    class MyY2AxisFormatter extends ValueFormatter {
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            return value+"W";
+        }
+    }
+    class MyXAxisFormatter extends ValueFormatter {
+        @Override
+        public String getAxisLabel(float value, AxisBase axis) {
+            return ((int)value)+" d";
+        }
     }
 
 }

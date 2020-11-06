@@ -48,15 +48,13 @@ public class IntroActivity extends AppCompatActivity {
 
         }
         else if (restorePrefData()) {
-            Intent mainActivity = new Intent(getApplicationContext(),MainActivity.class );
+            Intent mainActivity = new Intent(getApplicationContext(),TabbedActivity.class );
             startActivity(mainActivity);
             finish();
         }
-
         setContentView(R.layout.activity_intro);
 
         // hide the action bar
-
         getSupportActionBar().hide();
 
         // ini views
@@ -69,9 +67,9 @@ public class IntroActivity extends AppCompatActivity {
         // fill list screen
 
         final List<ScreenItem> mList = new ArrayList<>();
-        mList.add(new ScreenItem("Il tecnico sei tu","Posiziona il telefono nel punto in cui vorresti installare il pannello e segui le indicazioni date dall'app. Riuscirai così ad orientare il pannello senza l'aiuto di un professionista!",R.drawable.lavorofinito));
-        mList.add(new ScreenItem("Alta precisione","Tramite i sensori presenti nel tuo dispositivo e la tua posizione (latitudine e longitudine), riusciamo a fornire l'inclinazione e l'orientamento ottimale per il tuo pannello solare.",R.drawable.location));
-        mList.add(new ScreenItem("Unica installazione","L'app ti permette di installare il pannello in modo da non dover più modificarne la posizione lungo tutto il suo arco vitale.",R.drawable.terra));
+        mList.add(new ScreenItem("Technician is you","Place the phone in the location where you would like to install the panel and follow the instructions given by the app. You will be able to place the panel correctly without the help of an engineer.",R.drawable.lavorofinito));
+        mList.add(new ScreenItem("High accuracy","Through the sensors in your device and your position (latitude and longitude) we will be able to provide the optimal inclination and orientation for your solar and photovoltaic panel.",R.drawable.location));
+        mList.add(new ScreenItem("Only one installation","The app allows you to install the panel so that you no longer have to change its position along its entire lifespan.",R.drawable.terra));
 
         // setup viewpager
         screenPager =findViewById(R.id.screen_viewpager);
@@ -98,16 +96,9 @@ public class IntroActivity extends AppCompatActivity {
                 }
 
                 if (position == mList.size()-1) { // when we rech to the last screen
-
                     // TODO : show the GETSTARTED Button and hide the indicator and the next button
-
                     loaddLastScreen();
-
-
                 }
-
-
-
             }
         });
 
@@ -150,7 +141,7 @@ public class IntroActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
-                    Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent mainActivity = new Intent(getApplicationContext(), TabbedActivity.class);
                     startActivity(mainActivity);
                     savePrefsData();
                     finish();

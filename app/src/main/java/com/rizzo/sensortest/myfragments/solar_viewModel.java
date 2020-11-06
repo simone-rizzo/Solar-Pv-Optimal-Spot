@@ -13,25 +13,30 @@ import androidx.lifecycle.ViewModel;
 
 public class solar_viewModel extends ViewModel {
 
-    MutableLiveData<List<DataEntry>> data = new MutableLiveData<List<DataEntry>>();
+    MutableLiveData<Double> lat = new MutableLiveData<Double>();
+    MutableLiveData<Double> lng = new MutableLiveData<Double>();
+    MutableLiveData<String> testo = new MutableLiveData<String>();
 
-    public void fetch_data(PVGsAPI p)
+
+    public void setData(double lat, double lng)
     {
-        p.set(data);
-        Thread a = new Thread(p);
-        a.start();
+        this.lat.postValue(lat);
+        this.lng.postValue(lng);
     }
-    public void setData()
+    public void setDataString(String text)
     {
-        List<DataEntry> pisda = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            pisda.add(new ValueDataEntry((i + 1), i));
-        }
-        data.postValue(pisda);
+        this.testo.postValue(text);
+    }
+    public LiveData<String> getText()
+    {
+        return testo;
     }
 
-    public LiveData<List<DataEntry>> getData() {
-        return data;
+    public LiveData<Double> getLat() {
+        return lat;
+    }
+    public LiveData<Double> getLng() {
+        return lng;
     }
 
 }

@@ -56,6 +56,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -85,6 +86,12 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
     public static Animation btnAnim;
 
     private String pv_choise = "crystSi";
+    private solar_viewModel model;
+
+    /*public photo_frag(solar_viewModel model)
+    {
+        this.model = model;
+    }*/
 
     @Nullable
     @Override
@@ -106,6 +113,16 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
         anyChartView = (LineChart) view.findViewById(R.id.plot);
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
+        model =  new ViewModelProvider(requireActivity()).get(solar_viewModel.class);
+        model.getLat().observe(getViewLifecycleOwner(), item -> {
+            Lat=item;
+        });
+        model.getLng().observe(getViewLifecycleOwner(), item -> {
+            Lng=item;
+        });
+        model.getText().observe(getViewLifecycleOwner(), item ->{
+            latlogText.setText(item);
+        });
         Button button = (Button) view.findViewById(R.id.button);
         button.setAnimation(btnAnim);
         button.setOnClickListener(new View.OnClickListener() {
@@ -123,14 +140,13 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
                         orientamentoOttimo.setText(valori[1]);*/
 
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Latitudine e Longitudine non ancora pronti",
+                    Toast.makeText(getActivity().getApplicationContext(), "Latitude and Longitude still not detected",
                             Toast.LENGTH_SHORT).show();
                 }
             }
         });
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(accelelistner, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        requestPermission();
         start();
         return view;
     }
@@ -269,64 +285,5 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         mSensorManager.registerListener(accelelistner, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         start();
     }
-
-    public void requestPermission() {
-        Dexter.withActivity(getActivity()).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse response) {
-                getcurrentLocation();
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse response) {
-
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
-            }
-        }).check();
-    }
-
-    //Ottiene la posizione corrente tramite la libreria di google
-    public void getcurrentLocation() {
-        progressBar.setVisibility(View.VISIBLE);
-        final LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(300);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationCallback callback = new LocationCallback() {
-
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
-                if (locationResult != null && locationResult.getLocations().size() > 0) {
-                    int lastestLocationIndex = locationResult.getLocations().size() - 1;
-                    double latitude = locationResult.getLocations().get(lastestLocationIndex).getLatitude();
-                    double longitudine = locationResult.getLocations().get(lastestLocationIndex).getLongitude();
-                    latlogText.setText(String.format("Lat %s Lng %s", latitude, longitudine));
-                    Lat = latitude;
-                    Lng = longitudine;
-                    //lista_taubd = ottieniTau();
-                }
-                progressBar.setVisibility(View.GONE);
-            }
-        };
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(locationRequest, callback, Looper.getMainLooper());
-
-    }
-
 }
 

@@ -85,6 +85,11 @@ public class solar_frag extends Fragment implements SensorEventListener {
     private static OpenGlView openGlView;
     private solar_viewModel myModel;
 
+    /*public solar_frag(solar_viewModel model)
+    {
+        this.myModel=model;
+    }*/
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,7 +104,6 @@ public class solar_frag extends Fragment implements SensorEventListener {
         inclinazioneOttima = (TextView) view.findViewById(R.id.yOptimaldegree);
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
         plot = (LineChart) view.findViewById(R.id.plot);
-
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
         Button button = (Button) view.findViewById(R.id.button);
         button.setAnimation(btnAnim);
@@ -109,9 +113,13 @@ public class solar_frag extends Fragment implements SensorEventListener {
                 if (Lat != null && Lng != null) {
                     String id = "";
                     PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, plot);
-                    myModel.fetch_data(task);
+                    Thread a = new Thread(task);
+                    a.start();
+                    plot.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Latitudine e Longitudine non ancora pronti",
+                    Toast.makeText(getActivity().getApplicationContext(), "Latitude and Longitude still not detected",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -288,6 +296,8 @@ public class solar_frag extends Fragment implements SensorEventListener {
                     latlogText.setText(String.format("Lat %s Lng %s", latitude, longitudine));
                     Lat = latitude;
                     Lng = longitudine;
+                    myModel.setData(Lat, Lng);
+                    myModel.setDataString(String.format("Lat %s Lng %s", latitude, longitudine));
                     //lista_taubd = ottieniTau();
                 }
                 progressBar.setVisibility(View.GONE);
