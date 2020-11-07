@@ -47,19 +47,15 @@ public class why_it_works extends AppCompatActivity {
                                         String contentDisposition, String mimetype,
                                         long contentLength) {
                 if(permises) {
-                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                    /*CookieManager cookieManager = CookieManager.getInstance();
-                    String cookie = cookieManager.getCookie("https://drive.google.com");     // which is "http://bookboon.com"
-                    request.addRequestHeader("Cookie", cookie);
-
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse("https://simone-rizzo.github.io/Optimal-solar-panel-tilt-angle/solarpanel-doc.pdf"));
+                    CookieManager cookieManager = CookieManager.getInstance();
                     request.allowScanningByMediaScanner();
                     Environment.getExternalStorageDirectory();
                     getApplicationContext().getFilesDir().getPath(); //which returns the internal app files directory path
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "download");
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "SolarPVOptimalSpotDoc.pdf");
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                    dm.enqueue(request);*/
+                    dm.enqueue(request);
                 }
                 else {
                     requestPermission();
