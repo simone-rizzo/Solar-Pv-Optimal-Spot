@@ -265,7 +265,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="PeakPower"
+                    android:text="Peak power:"
                     android:textColor="#fff"
                     android:textSize="20dp"></TextView>
 
@@ -278,7 +278,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Media"
+                    android:text="Mean power:"
                     android:textColor="#fff"
                     android:textSize="20dp"></TextView>
 
