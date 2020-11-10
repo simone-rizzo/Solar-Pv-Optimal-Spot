@@ -18,6 +18,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.rizzo.sensortest.ui.main.SectionsPagerAdapter;
@@ -26,6 +28,7 @@ public class TabbedActivity extends AppCompatActivity {
 
     private static DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    public static Animation btnAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class TabbedActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_menu);
+        btnAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_animation);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -52,6 +56,11 @@ public class TabbedActivity extends AppCompatActivity {
                         Intent intent2 = new Intent(getApplicationContext(), credits.class);
                         intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent2);
+                        break;
+                    case R.id.contacts:
+                        Intent intent4 = new Intent(getApplicationContext(), contacts.class);
+                        intent4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent4);
                         break;
                     case R.id.help:
                         Intent intent3 = new Intent(getApplicationContext(), IntroActivity.class);

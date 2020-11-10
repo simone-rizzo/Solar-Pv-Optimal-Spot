@@ -68,6 +68,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Button worksButton,creditsButton,helpButton;
     private NavigationView navigationView;
-
+    public AtomicBoolean thread_started = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
                     a.start();*/
                     String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView);
+                    PVGsAPI task = new PVGsAPI(thread_started,"https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, anyChartView, null);
                     Thread a = new Thread(task);
                     //a.start();
 

@@ -3,6 +3,7 @@ package com.rizzo.sensortest.myfragments;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -10,9 +11,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +35,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -41,6 +45,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.rizzo.sensortest.Coordinate;
 import com.rizzo.sensortest.PVGsAPI;
 import com.rizzo.sensortest.R;
+import com.rizzo.sensortest.myTimerTask;
 import com.rizzo.sensortest.opengl.OpenGlView;
 
 import androidx.annotation.NonNull;
@@ -54,6 +59,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class solar_frag extends Fragment implements SensorEventListener {
 
@@ -85,6 +91,8 @@ public class solar_frag extends Fragment implements SensorEventListener {
     private static OpenGlView openGlView;
     private solar_viewModel myModel;
 
+    public AtomicBoolean gps_position=new AtomicBoolean(false);
+    public AtomicBoolean thread_started = new AtomicBoolean(false);
     /*public solar_frag(solar_viewModel model)
     {
         this.myModel=model;
@@ -110,17 +118,18 @@ public class solar_frag extends Fragment implements SensorEventListener {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Lat != null && Lng != null) {
-                    String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, plot);
-                    Thread a = new Thread(task);
-                    a.start();
-                    plot.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
-
+                if (Lat != null && Lng != null ) {
+                    if(!thread_started.get()) {
+                        String id = "";
+                        thread_started.set(true);
+                        PVGsAPI task = new PVGsAPI(thread_started, "https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=CIS&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, false, progressBar, plot, null);
+                        Thread a = new Thread(task);
+                        a.start();
+                        plot.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Latitude and Longitude still not detected",
-                            Toast.LENGTH_SHORT).show();
+                    turnGPSOn().show();
                 }
             }
         });
@@ -167,6 +176,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
 
         }
     };
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -262,6 +272,9 @@ public class solar_frag extends Fragment implements SensorEventListener {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
                 getcurrentLocation();
+                Timer t = new Timer();
+                myTimerTask myTimerTask = new myTimerTask(gps_position,turnGPSOn());
+                t.schedule(myTimerTask, 4000L);
             }
 
             @Override
@@ -274,6 +287,11 @@ public class solar_frag extends Fragment implements SensorEventListener {
 
             }
         }).check();
+    }
+
+    private Snackbar turnGPSOn() {
+        return Snackbar.make(getActivity().findViewById(R.id.drawer_layout), "Please enable GPS, and wait for the position",
+                Snackbar.LENGTH_LONG);
     }
 
     //Ottiene la posizione corrente tramite la libreria di google
@@ -296,6 +314,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
                     latlogText.setText(String.format("Lat %s Lng %s", latitude, longitudine));
                     Lat = latitude;
                     Lng = longitudine;
+                    gps_position.set(true);
                     myModel.setData(Lat, Lng);
                     myModel.setDataString(String.format("Lat %s Lng %s", latitude, longitudine));
                     //lista_taubd = ottieniTau();

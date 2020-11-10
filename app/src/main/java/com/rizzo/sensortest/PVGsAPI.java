@@ -24,6 +24,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.anychart.AnyChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -32,6 +34,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.rizzo.sensortest.myfragments.solar_viewModel;
 
 import android.os.Handler;
 
@@ -57,14 +60,19 @@ public class PVGsAPI implements Runnable {
     //private  Handler handler;
     private  boolean pv;
     private MutableLiveData<List<DataEntry>> mutable;
+    private AtomicBoolean thread_started = new AtomicBoolean();
+    private solar_viewModel model;
 
-    public PVGsAPI(String urlToread, TextView lat, TextView lng, boolean pv, ProgressBar progressBar, LineChart anyChartView) {
+
+    public PVGsAPI(AtomicBoolean thread_started,String urlToread, TextView lat, TextView lng, boolean pv, ProgressBar progressBar, LineChart anyChartView, solar_viewModel model) {
+        this.thread_started=thread_started;
         this.urlToread = urlToread;
         this.Lat=lat;
         this.Lng=lng;
         this.pv=pv;
         this.progressBar=progressBar;
         this.anyChartView=anyChartView;
+        this.model=model;
     }
 
     public void getHTML(String urlToRead) throws Exception {
@@ -83,9 +91,14 @@ public class PVGsAPI implements Runnable {
             ArrayList<Double> dati = new ArrayList<Double>();
             int numero_days = 1;
             double media = 0.0f;
+            double MediaTot = 0.0f;
+            double max = 0.0f;
             for (int i = 0; i < listaIrradianza.size() && numero_days <= 365; i++) {
                 if ((i + 1) % 24 == 0) {
                     media = media / 24;
+                    MediaTot+=media;
+                    if(media>max)
+                        max=media;
                     dati.add(media);
                     numero_days++;
                     media = 0;
@@ -97,23 +110,27 @@ public class PVGsAPI implements Runnable {
                     }
                 }
             }
+            MediaTot=MediaTot/365;
+            if(pv)
+            {
+                model.setPeak(max,MediaTot);
+            }
             List<Entry> data = new ArrayList<Entry>();
             for (int i = 0; i < dati.size(); i++) {
                 double d = dati.get(i);
                 data.add(new Entry((i + 1), (float)(d)));
             }
-            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Daily mean irradiance":"Daily mean power");
+            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Daily mean irradiance on a well oriented surface during the year":"Daliy mean power developed by the selected PV technology during the year");
             dataSet.setColor(R.color.gradient_end_color);
             LineData lineData = new LineData(dataSet);
 
-            //int altezza = node.get("inputs").get("location").get("elevation").asInt();
             Lat.post(new Runnable() {
                 @Override
                 public void run() {
                     Lat.setText(value[0] + "°");
                     Lng.setText(value[1] + "° S");
-                    Lat.setAnimation(MainActivity.btnAnim);
-                    Lng.setAnimation(MainActivity.btnAnim);
+                    Lat.setAnimation(TabbedActivity.btnAnim);
+                    Lng.setAnimation(TabbedActivity.btnAnim);
                     progressBar.setVisibility(View.GONE);
                     anyChartView.setVisibility(View.VISIBLE);
                     //OpenGLRenderer.Instance.SetOptimalValues(new Float(value[0]),new Float(value[1]));
@@ -126,6 +143,7 @@ public class PVGsAPI implements Runnable {
             anyChartView.getAxisLeft().setValueFormatter((!pv)?formatterY:new MyY2AxisFormatter());
             anyChartView.getXAxis().setValueFormatter(formatterX);
             anyChartView.invalidate();
+            thread_started.set(false);
         }
         catch (Exception e)
         {

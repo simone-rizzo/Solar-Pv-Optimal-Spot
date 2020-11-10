@@ -43,7 +43,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:text="Select PV tecnology:"
                         android:textSize="15dp"></TextView>
                 </LinearLayout>
@@ -57,6 +57,41 @@
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
                         />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="Enter area in m2:"
+                        android:textSize="15dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp">
+
+                    <EditText
+                        android:id="@+id/editTextNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="numberDecimal" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -96,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp"
+                android:padding="0dp"
                 android:weightSum="2">
 
                 <TextView
@@ -104,26 +139,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#fff"
-                    android:textSize="30dp"></TextView>
+                    android:textSize="20dp"></TextView>
 
                 <TextView
                     android:id="@+id/gradiOptimaltext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="..."
                     android:textColor="#fff"
-                    android:textSize="30dp"></TextView>
+                    android:textSize="20dp"></TextView>
 
             </LinearLayout>
 
@@ -162,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp"
+                android:padding="0dp"
                 android:weightSum="2">
 
                 <TextView
@@ -170,26 +205,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="ciao"
                     android:textColor="#fff"
-                    android:textSize="30dp"></TextView>
+                    android:textSize="20dp"></TextView>
 
                 <TextView
                     android:id="@+id/yOptimaldegree"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="..."
                     android:textColor="#fff"
-                    android:textSize="30dp"></TextView>
+                    android:textSize="20dp"></TextView>
 
             </LinearLayout>
 
@@ -209,11 +244,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:textSize="18dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"></TextView>
+                android:textSize="18dp"></TextView>
+            <LinearLayout
+                android:background="@drawable/btn_gradient_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginBottom="5dp">
 
+                <TextView
+                    android:id="@+id/peak"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="PeakPower"
+                    android:textColor="#fff"
+                    android:textSize="20dp"></TextView>
+
+                <TextView
+                    android:id="@+id/mean"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Media"
+                    android:textColor="#fff"
+                    android:textSize="20dp"></TextView>
+
+            </LinearLayout>
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="70dp"

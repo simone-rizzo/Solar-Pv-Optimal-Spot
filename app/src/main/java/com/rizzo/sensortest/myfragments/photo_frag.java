@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -38,6 +39,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -49,8 +51,12 @@ import com.rizzo.sensortest.PVGsAPI;
 import com.rizzo.sensortest.R;
 import com.rizzo.sensortest.opengl.OpenGlView;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,7 +70,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
 
     ImageView compass_img;
     private TextView txt_compass;
-    private TextView txt_inclinazione, inclinazioneOttima, orientamentoOttimo, irradianza;
+    private TextView txt_inclinazione, inclinazioneOttima, orientamentoOttimo, peak, mean;
     int mAzimuth;
     private SensorManager mSensorManager;
     private Sensor mRotationV, mAccelerometer, mMagnetometer;
@@ -87,11 +93,8 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
 
     private String pv_choise = "crystSi";
     private solar_viewModel model;
-
-    /*public photo_frag(solar_viewModel model)
-    {
-        this.model = model;
-    }*/
+    public AtomicBoolean thread_started = new AtomicBoolean(false);
+    private EditText editTextNumber;
 
     @Nullable
     @Override
@@ -104,6 +107,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        editTextNumber = (EditText) view.findViewById(R.id.editTextNumber);
         compass_img = (ImageView) view.findViewById(R.id.imageView);
         txt_compass = (TextView) view.findViewById(R.id.graditext);
         txt_inclinazione = (TextView) view.findViewById(R.id.ydegree);
@@ -113,6 +117,8 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         orientamentoOttimo = (TextView) view.findViewById(R.id.gradiOptimaltext);
         anyChartView = (LineChart) view.findViewById(R.id.plot);
         btnAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.button_animation);
+        peak = (TextView) view.findViewById(R.id.peak);
+        mean = (TextView) view.findViewById(R.id.mean);
         model =  new ViewModelProvider(requireActivity()).get(solar_viewModel.class);
         model.getLat().observe(getViewLifecycleOwner(), item -> {
             Lat=item;
@@ -123,25 +129,30 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         model.getText().observe(getViewLifecycleOwner(), item ->{
             latlogText.setText(item);
         });
+        model.getPeak_max().observe(getViewLifecycleOwner(), item ->{
+            double m2 = Double.parseDouble(editTextNumber.getText().toString());
+            peak.setText("Peak power: "+valoreMoltiplicato(m2,item));
+        });
+        model.getPeak_mean().observe(getViewLifecycleOwner(), item ->{
+            double m2 = Double.parseDouble(editTextNumber.getText().toString());
+            mean.setText("Mean power: "+valoreMoltiplicato(m2,item));
+        });
         Button button = (Button) view.findViewById(R.id.button);
         button.setAnimation(btnAnim);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Lat != null && Lng != null) {
-                    /*MegaFunzione a = new MegaFunzione(Lat, Lng, inclinazioneOttima, orientamentoOttimo,irradianza,anyChartView, lista_taubd.all_tauB,lista_taubd.all_tauD);
-                    a.start();*/
-                    String id = "";
-                    PVGsAPI task = new PVGsAPI("https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice="+pv_choise+"&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, true, progressBar, anyChartView);
-                    Thread a = new Thread(task);
-                    a.start();
-                    progressBar.setVisibility(View.VISIBLE);
-                        /*inclinazioneOttima.setText(valori[0]);
-                        orientamentoOttimo.setText(valori[1]);*/
-
+                    if(!thread_started.get()) {
+                        String id = "";
+                        thread_started.set(true);
+                        PVGsAPI task = new PVGsAPI(thread_started, "https://re.jrc.ec.europa.eu/api/seriescalc?lat=" + Lat.toString() + "&lon=" + Lng.toString() + "&optimalangles=1&outputformat=json&startyear=2013&endyear=2016&pvtechchoice=" + pv_choise + "&pvcalculation=1&peakpower=1&loss=1", inclinazioneOttima, orientamentoOttimo, true, progressBar, anyChartView, model);
+                        Thread a = new Thread(task);
+                        a.start();
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Latitude and Longitude still not detected",
-                            Toast.LENGTH_SHORT).show();
+                    turnGPSOn();
                 }
             }
         });
@@ -150,6 +161,27 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
         start();
         return view;
     }
+    public static String formatToSignificant(double value,
+                                             int significant)
+    {
+        MathContext mathContext = new MathContext(significant,
+                RoundingMode.DOWN);
+        BigDecimal bigDecimal = new BigDecimal(value,
+                mathContext);
+        return bigDecimal.toPlainString();
+    }
+    public String valoreMoltiplicato(double m2, double p)
+    {
+        double n_pannelli = (int)(m2/1.7);
+        return formatToSignificant(n_pannelli*p,2);
+    }
+
+    private void turnGPSOn(){
+        Snackbar.make(getActivity().findViewById(R.id.drawer_layout), "Please enable GPS, and wait for the position",
+                Snackbar.LENGTH_LONG)
+                .show();
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {

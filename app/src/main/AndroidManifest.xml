@@ -29,6 +29,9 @@
             android:name=".credits"
             android:label="Credits" />
         <activity
+            android:name=".contacts"
+            android:label="Contacts" />
+        <activity
             android:name=".why_it_works"
             android:label="Documentation" />
         <activity android:name=".chart" />
