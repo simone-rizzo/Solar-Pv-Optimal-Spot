@@ -307,6 +307,7 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@drawable/btn_gradient_style"

@@ -24,8 +24,8 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28dp"
-            android:text="Developers" />
+            android:text="Developers"
+            android:textSize="26dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -43,14 +43,14 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="30dp" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28dp"
-            android:text="Reviewers &amp; Consultant" />
+            android:text="Reviewers &amp; Consultant"
+            android:textSize="26dp" />
 
         <TextView
             android:id="@+id/textView5"
@@ -61,14 +61,14 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="30dp" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28dp"
-            android:text="Beta - Tester" />
+            android:text="Beta - Tester"
+            android:textSize="26dp" />
 
         <TextView
             android:id="@+id/textView7"
@@ -111,5 +111,30 @@
             android:layout_height="wrap_content"
             android:textSize="18dp"
             android:text="Antonino Caratozzolo" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Extra Reviewers &amp; Consultants"
+            android:textSize="26dp" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dott. Francesco Demetrio Minuto (Associate Professor at Politecnico di Torino)"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dott. Lorenzo Bottaccioli (Associate Professor at Politecnico di Torino)"
+            android:textSize="18dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

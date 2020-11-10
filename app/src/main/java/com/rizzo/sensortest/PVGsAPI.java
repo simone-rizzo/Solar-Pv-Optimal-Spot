@@ -120,7 +120,7 @@ public class PVGsAPI implements Runnable {
                 double d = dati.get(i);
                 data.add(new Entry((i + 1), (float)(d)));
             }
-            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Daily mean irradiance on optimal spot each year":"Daliy mean power produced by on PV panel each year");
+            LineDataSet dataSet = new LineDataSet(data,(!pv)?"Daily mean irradiance on optimal spot each year":"Daliy mean power produced by one PV panel each year");
             dataSet.setColor(R.color.gradient_end_color);
             LineData lineData = new LineData(dataSet);
 

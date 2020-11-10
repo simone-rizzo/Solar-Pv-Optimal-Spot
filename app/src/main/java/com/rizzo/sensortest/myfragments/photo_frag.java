@@ -133,14 +133,14 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
             String text = editTextNumber.getText().toString();
             if(!text.equals("")) {
                 double m2 = Double.parseDouble(editTextNumber.getText().toString());
-                peak.setText("Peak power: " + valoreMoltiplicato(m2, item)+"w");
+                peak.setText("Peak power: " + valoreMoltiplicato(m2, item)+"W");
             }
         });
         model.getPeak_mean().observe(getViewLifecycleOwner(), item ->{
             String text = editTextNumber.getText().toString();
             if(!text.equals("")) {
                 double m2 = Double.parseDouble(editTextNumber.getText().toString());
-                mean.setText("Mean power: " + valoreMoltiplicato(m2, item)+"w");
+                mean.setText("Mean power: " + valoreMoltiplicato(m2, item)+"W");
             }
         });
         Button button = (Button) view.findViewById(R.id.button);
