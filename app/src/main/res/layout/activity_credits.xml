@@ -134,7 +134,7 @@
             android:id="@+id/textView23"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dott. Lorenzo Bottaccioli (Associate Professor at Politecnico di Torino)"
+            android:text="Dott. Riccardo Novo (At Politecnico di Torino)"
             android:textSize="18dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
