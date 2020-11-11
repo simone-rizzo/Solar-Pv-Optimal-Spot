@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rizzo.sensortest">
+    package="com.ReG.PvOptimalSpot">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -22,20 +22,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".TabbedActivity"
+            android:name="com.ReG.PvOptimalSpot.TabbedActivity"
             android:label="@string/title_activity_tabbed">
         </activity>
         <activity
-            android:name=".credits"
+            android:name="com.ReG.PvOptimalSpot.credits"
             android:label="Credits" />
         <activity
-            android:name=".contacts"
+            android:name="com.ReG.PvOptimalSpot.contacts"
             android:label="Contacts" />
         <activity
-            android:name=".why_it_works"
+            android:name="com.ReG.PvOptimalSpot.why_it_works"
             android:label="Documentation" />
-        <activity android:name=".chart" />
-        <activity android:name=".IntroActivity">
+        <activity android:name="com.ReG.PvOptimalSpot.chart" />
+        <activity android:name="com.ReG.PvOptimalSpot.IntroActivity">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.ReG.PvOptimalSpot.MainActivity" />
     </application>
 
 </manifest>
