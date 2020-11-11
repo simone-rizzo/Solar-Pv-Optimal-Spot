@@ -2,6 +2,7 @@ package com.ReG.PvOptimalSpot;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +28,7 @@ public class IntroActivity extends AppCompatActivity {
     Button btnNext;
     int position = 0 ;
     Button btnGetStarted;
+    TextView term;
     Animation btnAnim ;
     TextView tvSkip;
 
@@ -60,6 +62,7 @@ public class IntroActivity extends AppCompatActivity {
         // ini views
         btnNext = findViewById(R.id.btn_next);
         btnGetStarted = findViewById(R.id.btn_get_started);
+        term = (TextView)findViewById(R.id.term);
         tabIndicator = findViewById(R.id.tab_indicator);
         btnAnim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_animation);
         tvSkip = findViewById(R.id.tv_skip);
@@ -181,13 +184,16 @@ public class IntroActivity extends AppCompatActivity {
 
         btnNext.setVisibility(View.INVISIBLE);
         btnGetStarted.setVisibility(View.VISIBLE);
+        term.setVisibility(View.VISIBLE);
         tvSkip.setVisibility(View.INVISIBLE);
         tabIndicator.setVisibility(View.INVISIBLE);
         // TODO : ADD an animation the getstarted button
         // setup animation
         btnGetStarted.setAnimation(btnAnim);
+    }
 
-
-
+    public void onClick(View view) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://simone-rizzo.github.io/Solar-Pv-Optimal-Spot/term.html"));
+        startActivity(intent);
     }
 }
