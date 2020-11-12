@@ -161,6 +161,10 @@ public class solar_frag extends Fragment implements SensorEventListener {
             //OpenGLRenderer.Instance.setX(inclination_raw);
             int inclination = Math.round(inclination_raw);
             gradi = inclination;
+            if(gradi>90)
+            {
+                gradi=180-gradi;
+            }
             txt_inclinazione.setText(gradi + "°");
         }
         @Override
@@ -195,6 +199,7 @@ public class solar_frag extends Fragment implements SensorEventListener {
         {
             mAzimuth-=360;
         }
+        mAzimuth=mAzimuth*-1;
         txt_compass.setText(mAzimuth + "° S");
     }
 

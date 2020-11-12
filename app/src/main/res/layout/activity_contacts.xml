@@ -29,7 +29,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/textView19"
@@ -47,7 +47,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/textView24"
@@ -65,7 +65,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="30dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -76,7 +76,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -101,7 +101,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/textView14"
@@ -119,7 +119,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/textView16"
@@ -133,6 +133,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@giannuzzolorenzo.exe"
+            android:textSize="18dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Andrea Lanzini"
+            android:textSize="28dp" />
+
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="andrea.lanzini@polito.it"
             android:textSize="18dp" />
 
     </LinearLayout>
