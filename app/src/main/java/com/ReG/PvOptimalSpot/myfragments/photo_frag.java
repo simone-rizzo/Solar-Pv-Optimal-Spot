@@ -70,6 +70,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
     private solar_viewModel model;
     public AtomicBoolean thread_started = new AtomicBoolean(false);
     private EditText editTextNumber;
+    private String[] pv_types = new String[]{"crystSi", "CIS", "CdTe"};
 
     @Nullable
     @Override
@@ -115,7 +116,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
             String text = editTextNumber.getText().toString();
             if(!text.equals("")) {
                 double m2 = Double.parseDouble(editTextNumber.getText().toString());
-                mean.setText("Mean power: " + valoreMoltiplicato(m2, item)+"W");
+                mean.setText("Mean Year Production: " + valoreMoltiplicato(m2, item)+"kW/h");
             }
         });
         Button button = (Button) view.findViewById(R.id.button);
@@ -154,7 +155,8 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
     public String valoreMoltiplicato(double m2, double p)
     {
         double n_pannelli = (int)(m2/1.7);
-        return formatToSignificant(n_pannelli*p,2);
+        double n_ore_annue = 8.76;
+        return formatToSignificant(n_pannelli*p*n_ore_annue,2);
     }
 
     private void turnGPSOn(){
@@ -173,7 +175,7 @@ public class photo_frag extends Fragment implements SensorEventListener, Adapter
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        String s = (String) parent.getItemAtPosition(pos);
+        String s = (String) pv_types[pos];
         pv_choise=s;
         Log.d("cazzo",s);
     }

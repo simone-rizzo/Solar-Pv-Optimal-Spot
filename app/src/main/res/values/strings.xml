@@ -4,8 +4,8 @@
     <string name="tab_text_1">Solar</string>
     <string name="tab_text_2">Photovoltaic</string>
     <string-array name="pv_type">
-        <item>crystSi</item>
-        <item>CIS</item>
-        <item>CdTe</item>
+        <item>Solar cells made of crystalline silicon</item>
+        <item>Cadmium telluride solar cells</item>
+        <item>Copper indium gallium selenide solar cells</item>
     </string-array>
 </resources>

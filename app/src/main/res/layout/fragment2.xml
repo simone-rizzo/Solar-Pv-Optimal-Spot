@@ -278,7 +278,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Mean power:"
+                    android:text="Mean Year production:"
                     android:textColor="#fff"
                     android:textSize="20dp"></TextView>
 
