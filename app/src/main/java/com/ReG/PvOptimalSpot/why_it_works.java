@@ -66,7 +66,6 @@ public class why_it_works extends AppCompatActivity {
                     request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "SolarPVOptimalSpotDoc.pdf");
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
-                    //scrivi_excell();
                 } else {
                     requestPermission();
                 }
@@ -100,7 +99,7 @@ public class why_it_works extends AppCompatActivity {
         }).check();
     }
 
-    public void scrivi_excell() {
+    /*public void scrivi_excell() {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Custom Sheet");
         File filePath = new File(Environment.getExternalStorageDirectory() + "/Demo.xls");
@@ -125,5 +124,5 @@ public class why_it_works extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.d("excell", "ho creato il file di excell " + filePath.getAbsoluteFile());
-    }
+    }*/
 }
